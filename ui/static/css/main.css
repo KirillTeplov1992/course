@@ -1,0 +1,45 @@
+body {
+    background-color: black;
+    color: white;
+    font-size: 20pt;
+}
+
+a {
+    color: whitesmoke;
+}
+
+.form {
+    font-size: 25pt;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: bold;
+    margin-left: 20px;
+}
+
+.select {
+    font-size: 20pt;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.select:hover, .select:focus{
+    outline: none;
+    border: 1px solid #bbbbbb;
+}
+
+.text {
+    background-color: #dddddd;
+    color: #666666;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    outline: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20pt;
+    line-height: 1.4;
+    transition: all 0.2s;
+}
+
+.container {
+    display: flex;
+}

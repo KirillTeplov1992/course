@@ -1,0 +1,28 @@
+package templates
+
+templ header(title string){
+    <head>
+        <title>{ title }</title>
+        <meta charset='utf-8'>
+        <!-- Ссылка на CSS стили -->
+	        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+}
+
+templ footer(){
+    <footer>Сайт создан на <strong>Golang</strong></footer>
+}
+
+templ Layout(contents templ.Component, title string){
+    @header(title)
+    <body>
+        <div>Математика:
+        <a href="/">Home</a>
+        </div>
+        <hr>
+        <main>
+            @contents
+        </main>
+        @footer()
+    </body>
+}

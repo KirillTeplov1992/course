@@ -1,0 +1,13 @@
+package templates
+
+import (
+    "course/internal/tasks/models"
+    "fmt"
+)
+
+templ Home(chapters []*models.Chapter){
+    for _, ch := range chapters{
+        {{ link := fmt.Sprintf("/task?id=%d", ch.ID) }}
+        <a href = { link }>{ ch.Name }</a>
+    }
+}
