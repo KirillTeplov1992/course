@@ -29,7 +29,7 @@ templ MainAdminPage(chapters []*models.Chapter){
             id="answer">
         </textarea>
         <button class="button" id="show-result-button">
-            Добавить задание
+            Посмотреть результат
         </button>
     </div>
     <div class="second-column">
@@ -37,8 +37,12 @@ templ MainAdminPage(chapters []*models.Chapter){
         <div class="task-box" id="task-box"></div>
         <label for="answer-box">Ответ:</label>
         <div class="answer-box" id="answer-box"></div>
+        <button class="button" id="add-task">
+            Добавить задание
+        </button>
     </div>        
 </div>
+
 
 <script>
         window.MathJax = {
@@ -47,7 +51,7 @@ templ MainAdminPage(chapters []*models.Chapter){
                 displayMath: [['$$', '$$'], ['\\[', '\\]']]
             }
         };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="/static/js/add_task.js"></script>
 }

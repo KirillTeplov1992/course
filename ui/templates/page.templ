@@ -1,0 +1,32 @@
+package templates
+
+import (
+    "course/internal/tasks/models"
+    "fmt"
+)
+
+templ TasksPage(tasks []*models.Task) {
+    for _, t := range tasks{
+        if t.IsTask == false {
+            {{ link := fmt.Sprintf("/task?id=%d", t.ID) }}
+            <a href = { link }>{ t.Name }</a>
+        } else {
+            <h2>
+            $${ t.Name }$$
+            <details>
+                <summary>Ответ:</summary>
+            ${ t.Answer }$
+            </details>
+            </h2>
+        }
+    }
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+}

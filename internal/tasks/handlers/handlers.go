@@ -57,7 +57,7 @@ func (h *handler) getTask(w http.ResponseWriter, r *http.Request){
 	tasks := h.repository.TaskRepository.GetTasks(id)
 	title := h.repository.TaskRepository.GetNameChapterById(id)
 
-	c := templates.Home(tasks)
+	c := templates.TasksPage(tasks)
 	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
 		h.logger.Fatal(err)
 	}

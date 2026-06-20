@@ -49,11 +49,13 @@ func (tr *TaskRepository) GetContents() []*models.Chapter {
 	return ChapterList
 }
 
-func (tr *TaskRepository) GetTasks(id int) []*models.Chapter{
+func (tr *TaskRepository) GetTasks(id int) []*models.Task{
 	stmt := `
 	select 
 		id,
-		task
+		task,
+		answer,
+		is_task
 	from
 		tasks
 	WHERE
@@ -64,11 +66,11 @@ func (tr *TaskRepository) GetTasks(id int) []*models.Chapter{
 		tr.logger.Fatal(err)
 	}
 
-	var taskList []*models.Chapter
+	var taskList []*models.Task
 
 	for res.Next(){
-		task := &models.Chapter{}
-		err = res.Scan(&task.ID, &task.Name)
+		task := &models.Task{}
+		err = res.Scan(&task.ID, &task.Name, &task.Answer, &task.IsTask)
 		if err != nil{
 			tr.logger.Fatal(err)
 		}
