@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "course/internal/tasks/models"
 
-func AddTask(chapters []*models.Chapter) templ.Component {
+func AddChapters(chapters []*models.Chapter) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,7 +31,7 @@ func AddTask(chapters []*models.Chapter) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<select class=\"select\" id=\"chapter\" name=\"chapter\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form action=\"/admin/save_chapter\" method=\"post\"><select class=\"select\" id=\"chapter_id\" name=\"chapter_id\"><option value=\"0\">Главный раздел</option> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -43,7 +43,7 @@ func AddTask(chapters []*models.Chapter) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(ch.ID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/templates/admin_page.templ`, Line: 8, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/templates/add_chapter.templ`, Line: 15, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 			if templ_7745c5c3_Err != nil {
@@ -56,7 +56,7 @@ func AddTask(chapters []*models.Chapter) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ch.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/templates/admin_page.templ`, Line: 8, Col: 41}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/templates/add_chapter.templ`, Line: 15, Col: 49}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -67,7 +67,7 @@ func AddTask(chapters []*models.Chapter) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</select><div class=\"container\"><div class=\"first-column\"><br><label for=\"task\">Задание</label><br><textarea class=\"text\" type=\"text\" name=\"task\" id=\"task\"></textarea><br><label for=\"task\">Ответ</label><br><textarea class=\"text\" type=\"text\" name=\"answer\" id=\"answer\"></textarea> <button class=\"button\" id=\"show-result-button\">Посмотреть результат</button></div><div class=\"second-column\"><label for=\"task-box\">Задание:</label><div class=\"task-box\" id=\"task-box\"></div><label for=\"answer-box\">Ответ:</label><div class=\"answer-box\" id=\"answer-box\"></div><button class=\"button\" id=\"add-task\">Добавить задание</button></div></div><script>\n        window.MathJax = {\n            tex: {\n                inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],\n                displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]\n            }\n        };\n</script><script id=\"MathJax-script\" async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script><script src=\"/static/js/add_task.js\"></script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</select><br><label for=\"chapter\">Название главы</label><br><textarea class=\"text\" type=\"text\" name=\"chapter\" id=\"chapter\"></textarea><br><button class=\"button\" id=\"add_chapter_button\">Добавить раздел</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

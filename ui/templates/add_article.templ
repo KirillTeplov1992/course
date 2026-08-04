@@ -2,8 +2,8 @@ package templates
 
 import "course/internal/tasks/models"
 
-templ AddTask(chapters []*models.Chapter){
-<select class="select" id="chapter" name="chapter">
+templ AddArticle(chapters []*models.Chapter){
+    <select class="select" id="chapter" name="chapter">
     for _, ch := range chapters{
         <option value={ ch.ID }>{ ch.Name }</option>
     }
@@ -20,14 +20,6 @@ templ AddTask(chapters []*models.Chapter){
             id="task">
         </textarea>
         <br>
-        <label for="task">Ответ</label>
-        <br>
-        <textarea
-            class="text"
-            type="text"
-            name="answer"
-            id="answer">
-        </textarea>
         <button class="button" id="show-result-button">
             Посмотреть результат
         </button>
@@ -35,8 +27,6 @@ templ AddTask(chapters []*models.Chapter){
     <div class="second-column">
         <label for="task-box">Задание:</label>
         <div class="task-box" id="task-box"></div>
-        <label for="answer-box">Ответ:</label>
-        <div class="answer-box" id="answer-box"></div>
         <button class="button" id="add-task">
             Добавить задание
         </button>
@@ -53,5 +43,5 @@ templ AddTask(chapters []*models.Chapter){
         };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script src="/static/js/add_task.js"></script>
+<script src="/static/js/add_chapter.js"></script>
 }

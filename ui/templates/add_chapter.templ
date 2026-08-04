@@ -1,0 +1,32 @@
+package templates
+
+import "course/internal/tasks/models"
+
+templ AddChapters(chapters []*models.Chapter){
+    <form
+        action="/admin/save_chapter"
+        method="post">
+        <select 
+            class="select"
+            id="chapter_id"
+            name="chapter_id">
+            <option value="0">Главный раздел</option>
+            for _, ch := range chapters {
+                <option value={ ch.ID }>{ ch.Name }</option>
+            }
+        </select>
+        <br>
+        <label for="chapter">Название главы</label>
+        <br>
+        <textarea
+            class="text"
+            type="text"
+            name="chapter"
+            id="chapter">
+        </textarea>
+        <br>
+        <button class="button" id="add_chapter_button">
+            Добавить раздел
+        </button>
+    </form>
+}

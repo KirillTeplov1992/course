@@ -27,7 +27,7 @@ func (tr *TaskRepository) GetContents() []*models.Chapter {
 	from
 		tasks
 	WHERE
- 		parent_id is NULL`
+ 		parent_id = 0`
 
 	res, err := tr.store.DB.Query(stmt)
 	if err != nil {

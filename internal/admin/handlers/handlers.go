@@ -9,11 +9,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 const (
 	adminURL = "/admin"
 	getDataURL = "/get_data"
+	addChapterURL = "/admin/add_chapter"
+	saveShapterURL = "/admin/save_chapter"
+	addTaskURL = "/admin/add_task"
+	addArticleURL = "/admin/add_article"
 )
 
 var _ handlers.Handler = &handler{}
@@ -33,13 +38,53 @@ func NewHandler(repository store.Store, logger logging.Logger) handlers.Handler{
 func (h *handler) Register (router *http.ServeMux){
 	router.HandleFunc(adminURL, h.adminPage)
 	router.HandleFunc(getDataURL, h.getData)
+	router.HandleFunc(addChapterURL, h.addChapter)
+	router.HandleFunc(saveShapterURL, h.saveChapter)
+	router.HandleFunc(addArticleURL, h.addArticle)
 }
 
 func (h *handler) adminPage (w http.ResponseWriter, r *http.Request){
-	title := "Добавление задания"
+	title := "Страница админа"
+
+	c := templates.MainAdminPage()
+	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
+		h.logger.Fatal(err)
+	}
+}
+
+func (h *handler) addChapter (w http.ResponseWriter, r *http.Request){
+	title := "Добавить раздел"
+
 	chapters := h.repository.AdminRepository.GetAllChapters()
 
-	c := templates.MainAdminPage(chapters)
+	c := templates.AddChapters(chapters)
+	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
+		h.logger.Fatal(err)
+	}
+}
+
+func (h *handler) saveChapter(w http.ResponseWriter, r *http.Request){
+	parent_id, err := strconv.Atoi(r.FormValue("chapter_id"))
+	if err != nil {
+		h.logger.Fatal(err)
+	}
+	chapter := r.FormValue("chapter")
+
+	task := models.Task{
+		Name: chapter,
+		ParentID: parent_id,
+		IsTask: false,
+	}
+
+	h.repository.AdminRepository.AddTask(task)
+}
+
+func (h *handler) addArticle (w http.ResponseWriter, r *http.Request){
+	title := "Добавить статью"
+
+	chapters := h.repository.AdminRepository.GetAllChapters()
+
+	c := templates.AddArticle(chapters)
 	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
 		h.logger.Fatal(err)
 	}
@@ -67,9 +112,7 @@ func (h *handler) getData (w http.ResponseWriter, r *http.Request){
 
 	fmt.Println(task.IsTask)
 
-	//h.repository.AdminRepository.AddTask(task)
-
-	
+	//h.repository.AdminRepository.AddTask(task)	
 
 	// Отправляем ответ обратно
 	w.Header().Set("Content-Type", "application/json")

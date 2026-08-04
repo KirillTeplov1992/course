@@ -10,6 +10,7 @@ templ TasksPage(tasks []*models.Task) {
         if t.IsTask == false {
             {{ link := fmt.Sprintf("/task?id=%d", t.ID) }}
             <a href = { link }>{ t.Name }</a>
+            <br>
         } else {
             <h2>
             $${ t.Name }$$
