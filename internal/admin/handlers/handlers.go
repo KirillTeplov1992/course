@@ -19,6 +19,7 @@ const (
 	saveShapterURL = "/admin/save_chapter"
 	addTaskURL = "/admin/add_task"
 	addArticleURL = "/admin/add_article"
+	addTaskWithPictureURL = "/admin/add_task_with_picture"
 )
 
 var _ handlers.Handler = &handler{}
@@ -41,12 +42,25 @@ func (h *handler) Register (router *http.ServeMux){
 	router.HandleFunc(addChapterURL, h.addChapter)
 	router.HandleFunc(saveShapterURL, h.saveChapter)
 	router.HandleFunc(addArticleURL, h.addArticle)
+	router.HandleFunc(addTaskURL, h.addTask)
+	router.HandleFunc(addTaskWithPictureURL, h.addTaskWithPicture)
 }
 
 func (h *handler) adminPage (w http.ResponseWriter, r *http.Request){
 	title := "Страница админа"
 
 	c := templates.MainAdminPage()
+	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
+		h.logger.Fatal(err)
+	}
+}
+
+func (h *handler) addTask (w http.ResponseWriter, r *http.Request){
+	title := "Добавить задание"
+
+	chapters := h.repository.AdminRepository.GetAllChapters()
+
+	c := templates.AddTask(chapters)
 	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
 		h.logger.Fatal(err)
 	}
@@ -63,6 +77,17 @@ func (h *handler) addChapter (w http.ResponseWriter, r *http.Request){
 	}
 }
 
+func (h *handler) addTaskWithPicture (w http.ResponseWriter, r *http.Request){
+	title := "Добавить задание с картинкой"
+
+	chapters := h.repository.AdminRepository.GetAllChapters()
+
+	c := templates.AddTaskWithPictere(chapters)
+	if err := templates.Layout(c, title).Render(r.Context(), w); err != nil{
+		h.logger.Fatal(err)
+	}
+}
+
 func (h *handler) saveChapter(w http.ResponseWriter, r *http.Request){
 	parent_id, err := strconv.Atoi(r.FormValue("chapter_id"))
 	if err != nil {
@@ -73,7 +98,7 @@ func (h *handler) saveChapter(w http.ResponseWriter, r *http.Request){
 	task := models.Task{
 		Name: chapter,
 		ParentID: parent_id,
-		IsTask: false,
+		TypeContent: "title",
 	}
 
 	h.repository.AdminRepository.AddTask(task)
@@ -110,9 +135,9 @@ func (h *handler) getData (w http.ResponseWriter, r *http.Request){
 		h.logger.Error("JSON не отправился", err)
 	}
 
-	fmt.Println(task.IsTask)
+	fmt.Println(task.TypeContent)
 
-	//h.repository.AdminRepository.AddTask(task)	
+	h.repository.AdminRepository.AddTask(task)	
 
 	// Отправляем ответ обратно
 	w.Header().Set("Content-Type", "application/json")

@@ -55,7 +55,7 @@ func (tr *TaskRepository) GetTasks(id int) []*models.Task{
 		id,
 		task,
 		answer,
-		is_task
+		type_content
 	from
 		tasks
 	WHERE
@@ -70,7 +70,7 @@ func (tr *TaskRepository) GetTasks(id int) []*models.Task{
 
 	for res.Next(){
 		task := &models.Task{}
-		err = res.Scan(&task.ID, &task.Name, &task.Answer, &task.IsTask)
+		err = res.Scan(&task.ID, &task.Name, &task.Answer, &task.TypeContent)
 		if err != nil{
 			tr.logger.Fatal(err)
 		}

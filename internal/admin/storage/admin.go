@@ -19,7 +19,7 @@ func NewRepository(store *sqlite3.Store, logger *logging.Logger) *AdminRepositor
 }
 
 func (ar *AdminRepository) GetAllChapters() []*models.Chapter{
-	stmt := `select id, task from tasks where is_task = false`
+	stmt := `select id, task from tasks where type_content = "title"`
 
 	res, err := ar.store.DB.Query(stmt)
 	if err != nil{
@@ -47,7 +47,7 @@ func (ar *AdminRepository) AddTask(task models.Task){
 		task,
 		answer,
 		parent_id,
-		is_task	
+		type_content	
 	)
 	VALUES (
 		?,
@@ -60,7 +60,7 @@ func (ar *AdminRepository) AddTask(task models.Task){
 								task.Name,
 								task.Answer,
 								task.ParentID,
-								task.IsTask)
+								task.TypeContent)
 	if err != nil{
 		ar.logger.Fatal(err)
 	}

@@ -8,7 +8,7 @@ type Task struct {
 	//Picture image.Image
 	Answer string `json:"answer,omitempty"`
 	ParentID int `json:"parent_id"`
-	IsTask bool `json:"is_task"`
+	TypeContent string `json:"type_content"`
 }
 
 type Chapter struct {

@@ -4,10 +4,8 @@ resultButton.addEventListener('click', renderLatex)
 
 function renderLatex(){
     const taskCode = document.getElementById('task').value;
-    const answerCode = document.getElementById('answer').value;
 
-    document.getElementById('task-box').innerHTML = '$$' + taskCode + '$$';
-    document.getElementById('answer-box').innerHTML = '$$' +answerCode + '$$';
+    document.getElementById('task-box').innerHTML = taskCode;
 
     if (window.MathJax) {
         MathJax.typesetPromise();
@@ -21,14 +19,12 @@ addTaskButton.addEventListener('click', sendTask)
 
 async function sendTask(){
     const taskCode = document.getElementById('task').value;
-    const answerCode = document.getElementById('answer').value;
     const parentID = document.getElementById('chapter').value;
 
     const data = {
         name : taskCode,
-        answer : answerCode,
         parent_id : Number(parentID),
-        type_content : 'task',
+        type_content : 'article',
     };
 
     try {

@@ -1,0 +1,60 @@
+package templates
+
+import "course/internal/tasks/models"
+
+templ AddTaskWithPictere(chapters []*models.Chapter){
+    <select class="select" id="chapter" name="chapter">
+        for _, ch := range chapters{
+            <option value={ ch.ID }>{ ch.Name }</option>
+        }
+    </select>
+    <div class="container">
+        <div class="first-column">
+            <br>
+            <label for="task">Задание</label>
+            <br>
+            <textarea
+                class="text"
+                type="text"
+                name="task"
+                id="task">
+            </textarea>
+            <br>
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*">
+            <textarea
+                class="text"
+                type="text"
+                name="answer"
+                id="answer">
+            </textarea>
+            <button class="button" id="show-result-button">
+                Посмотреть результат
+            </button>
+        </div>
+    <div class="second-column">
+        <label for="task-box">Задание:</label>
+        <div class="task-box" id="task-box"></div>
+        <img class="image" id="Image" alt="Здесь будет ваша картинка">
+        <label for="answer-box">Ответ:</label>
+        <div class="answer-box" id="answer-box"></div>
+        <button class="button" id="add-task">
+            Добавить задание
+        </button>
+    </div>        
+</div>
+
+
+<script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="/static/js/add_task_with_picture.js"></script>
+}

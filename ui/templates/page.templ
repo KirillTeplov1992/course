@@ -7,11 +7,11 @@ import (
 
 templ TasksPage(tasks []*models.Task) {
     for _, t := range tasks{
-        if t.IsTask == false {
+        if t.TypeContent == "title" {
             {{ link := fmt.Sprintf("/task?id=%d", t.ID) }}
             <a href = { link }>{ t.Name }</a>
             <br>
-        } else {
+        } if t.TypeContent == "task" {
             <h2>
             $${ t.Name }$$
             <details>
@@ -19,7 +19,11 @@ templ TasksPage(tasks []*models.Task) {
             ${ t.Answer }$
             </details>
             </h2>
-        }
+        } if t.TypeContent == "article" {
+            <h2>
+            { t.Name }
+            </h2>
+        }        
     }
     <script>
         window.MathJax = {

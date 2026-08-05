@@ -11,7 +11,7 @@ templ AddArticle(chapters []*models.Chapter){
 <div class="container">
     <div class="first-column">
         <br>
-        <label for="task">Задание</label>
+        <label for="task">Статья</label>
         <br>
         <textarea
             class="text"
@@ -25,10 +25,10 @@ templ AddArticle(chapters []*models.Chapter){
         </button>
     </div>
     <div class="second-column">
-        <label for="task-box">Задание:</label>
+        <label for="task-box">Статья:</label>
         <div class="task-box" id="task-box"></div>
         <button class="button" id="add-task">
-            Добавить задание
+            Добавить статью
         </button>
     </div>        
 </div>
@@ -43,5 +43,5 @@ templ AddArticle(chapters []*models.Chapter){
         };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script src="/static/js/add_chapter.js"></script>
+<script src="/static/js/add_article.js"></script>
 }

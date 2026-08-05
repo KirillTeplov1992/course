@@ -24,7 +24,7 @@ async function sendTask(){
     const data = {
         name : taskCode,
         parent_id : Number(parentID),
-        is_task : true,
+        type_content : 'title',
     };
 
     try {

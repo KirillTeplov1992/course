@@ -5,8 +5,14 @@ resultButton.addEventListener('click', renderLatex)
 function renderLatex(){
     const taskCode = document.getElementById('task').value;
     const answerCode = document.getElementById('answer').value;
+    const input = document.getElementById('imageInput');
+    const image = document.getElementById('Image');
+
+    const file = input.files[0];
+    const imageURL = URL.createObjectURL(file);
 
     document.getElementById('task-box').innerHTML = '$$' + taskCode + '$$';
+    image.src = imageURL;
     document.getElementById('answer-box').innerHTML = '$$' +answerCode + '$$';
 
     if (window.MathJax) {
