@@ -5,7 +5,7 @@ package models
 type Task struct {
 	ID int
 	Name string `json:"name"`
-	//Picture image.Image
+	PictureURL string
 	Answer string `json:"answer,omitempty"`
 	ParentID int `json:"parent_id"`
 	TypeContent string `json:"type_content"`
@@ -16,3 +16,4 @@ type Chapter struct {
 	Name string
 	ParentID int
 }
+

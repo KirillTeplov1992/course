@@ -45,6 +45,7 @@ func (ar *AdminRepository) AddTask(task models.Task){
 	stmt := `
 	INSERT INTO tasks (
 		task,
+		picture,
 		answer,
 		parent_id,
 		type_content	
@@ -53,11 +54,13 @@ func (ar *AdminRepository) AddTask(task models.Task){
 		?,
 		?,
 		?,
+		?,
 		?
 	)`
 
 	_, err := ar.store.DB.Exec(stmt,
 								task.Name,
+								task.PictureURL,
 								task.Answer,
 								task.ParentID,
 								task.TypeContent)

@@ -1,55 +1,76 @@
+// Константы конфигурации
+const SERVER_URL = 'http://localhost:4000/get_task_with_picture';
+
+// Элементы DOM
 const resultButton = document.getElementById('show-result-button');
+const addTaskButton = document.getElementById('add-task');
 
-resultButton.addEventListener('click', renderLatex)
+// Слушатели событий
+resultButton.addEventListener('click', renderLatex);
+addTaskButton.addEventListener('click', sendTask);
 
-function renderLatex(){
+// Функция локального рендеринга
+function renderLatex() {
     const taskCode = document.getElementById('task').value;
     const answerCode = document.getElementById('answer').value;
     const input = document.getElementById('imageInput');
     const image = document.getElementById('Image');
 
-    const file = input.files[0];
-    const imageURL = URL.createObjectURL(file);
+    // Безопасная обработка загрузки изображения
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        image.src = URL.createObjectURL(file);
+        image.style.display = 'block'; // Показываем тег img, если он был скрыт
+    } else {
+        image.src = '';
+        image.style.display = 'none'; // Скрываем, если файл не выбран
+    }
 
+    // Вставка текста формул
     document.getElementById('task-box').innerHTML = '$$' + taskCode + '$$';
-    image.src = imageURL;
-    document.getElementById('answer-box').innerHTML = '$$' +answerCode + '$$';
+    document.getElementById('answer-box').innerHTML = '$$' + answerCode + '$$';
 
-    if (window.MathJax) {
-        MathJax.typesetPromise();
+    // Перерисовка MathJax
+    if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+        MathJax.typesetPromise().catch((err) => console.error('MathJax error:', err));
     }
 }
 
-const url = 'http://localhost:4000/get_data';
-const addTaskButton = document.getElementById('add-task')
-
-addTaskButton.addEventListener('click', sendTask)
-
-async function sendTask(){
+async function sendTask() {
+    const chapterID = document.getElementById('chapter').value;
     const taskCode = document.getElementById('task').value;
     const answerCode = document.getElementById('answer').value;
-    const parentID = document.getElementById('chapter').value;
+    const input = document.getElementById('imageInput');
 
-    const data = {
-        name : taskCode,
-        answer : answerCode,
-        parent_id : Number(parentID),
-        type_content : 'task',
-    };
+    // Создаем объект FormData вместо обычного объекта JSON
+    const formData = new FormData();
+    formData.append('chapter', chapterID)
+    formData.append('task', taskCode);
+    formData.append('answer', answerCode);
+    formData.append('type_content', 'task_with_picture');
+
+    // Если файл выбран, добавляем его в форму
+    if (input.files && input.files[0]) {
+        formData.append('image', input.files[0]);
+    }
 
     try {
-    // Отправляем POST запрос на наш Go-сервер
-    const response = await fetch(url, {
-        method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-    });
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            // ВАЖНО: Мы НЕ пишем headers: {'Content-Type': '...'}
+            // Браузер сделает это автоматически
+            body: formData 
+        });
 
-    const result = await response.json();
-    console.log('Ответ сервера:', result);
-        } catch (error) {
-            console.error('Ошибка:', error);
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Ответ сервера:', result);
+        alert('Задача и картинка успешно сохранены!');
+    } catch (error) {
+        console.error('Ошибка при отправке:', error);
+        alert('Не удалось сохранить данные.');
     }
 }
