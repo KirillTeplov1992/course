@@ -15,11 +15,13 @@ templ TasksPage(tasks []*models.Task) {
         case "task":
             <h2>
             $${ t.Name }$$
+            </h2>
             <details>
                 <summary>Ответ:</summary>
+            <h2>
             ${ t.Answer }$
-            </details>
             </h2>
+            </details>
         case "article":
             <h2>
             { t.Name }
@@ -27,12 +29,17 @@ templ TasksPage(tasks []*models.Task) {
         case "task_with_picture":
             <h2>
             $${ t.Name }$$
-            <img src={ templ.SafeURL(t.PictureURL) } alt="Чертеж" loading="lazy"/>
+            </h2>
+            <img
+                src={ templ.URL(t.PictureURL) }
+                alt="Чертеж"
+                loading="lazy"/>
             <details>
                 <summary>Ответ:</summary>
+            <h2>
             ${ t.Answer }$
-            </details>
             </h2>
+            </details>
         default:
             <h3>Нифига не понятно</h3> 
         }

@@ -103,6 +103,7 @@ func (h *handler) saveChapter(w http.ResponseWriter, r *http.Request){
 
 	task := models.Task{
 		Name: chapter,
+		PictureURL: "",
 		ParentID: parent_id,
 		TypeContent: "title",
 	}
