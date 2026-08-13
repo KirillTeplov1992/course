@@ -2,6 +2,7 @@ package yandex
 
 import (
 	"context"
+	"course/internal/tasks/models"
 	"fmt"
 	"log"
 	"mime/multipart"
@@ -11,41 +12,44 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-const (
-	yandexStaticEndpoint = "https://storage.yandexcloud.net"
-	yandexRegion = "ru-central1-b"
-	backetName = "my-task-images"
-	accessKeyID = "YCAJEwKJoLee4euAx7bBMQLMU"
-	secretAccessKey = "YCM4SIqwu2lRoWnnt0spIFPG7k0zs1AaDfd8-AqO"
-)
+type S3Client struct{
+	conf *models.YandexConfig
+}
 
-func InitS3() *s3.Client{
-	creds := credentials.NewStaticCredentialsProvider(accessKeyID,
-													secretAccessKey,
+func NewS3Client() *S3Client{
+	return &S3Client{
+		conf: NewConfig(),
+	}
+}
+
+
+
+func(s3c *S3Client) InitS3() *s3.Client{
+	creds := credentials.NewStaticCredentialsProvider(s3c.conf.AccessKeyID,
+													s3c.conf.SecretAccessKey,
 													"")
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
-					config.WithRegion(yandexRegion),
+					config.WithRegion(s3c.conf.YandexRegion),
 					config.WithCredentialsProvider(creds),
 				)
 	if err != nil{
 		log.Fatal(err)
 	}
 	
-	yse := yandexStaticEndpoint
 
 	s3Client := s3.NewFromConfig(cfg, func(o *s3.Options) {
-		o.BaseEndpoint = &yse
+		o.BaseEndpoint = &s3c.conf.YandexStaticEndpoint
 	})
 
 	return s3Client
 }
 
-func DownLoadFile(fileName string, file multipart.File) (string, error){
-	bns := backetName
+func (s3c *S3Client)DownLoadFile(fileName string, file multipart.File) (string, error){
 	
-	_, err :=  InitS3().PutObject(context.TODO(), &s3.PutObjectInput{
-		Bucket: &bns,
+	
+	_, err :=  s3c.InitS3().PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket: &s3c.conf.BacketName,
 		Key: &fileName,
 		Body: file,
 	})
@@ -54,7 +58,10 @@ func DownLoadFile(fileName string, file multipart.File) (string, error){
 		return "", err
 	}
 
-	fileURL := fmt.Sprintf("%s/%s/%s", yandexStaticEndpoint, backetName, fileName)
+	fileURL := fmt.Sprintf("%s/%s/%s",
+	 			s3c.conf.YandexStaticEndpoint,
+				s3c.conf.BacketName,
+				fileName)
 
 	return fileURL, nil
 }

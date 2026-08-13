@@ -17,3 +17,11 @@ type Chapter struct {
 	ParentID int
 }
 
+type YandexConfig struct {
+	YandexStaticEndpoint string `toml:"yandex_static_endpoint"`
+	YandexRegion         string `toml:"yandex_region"`
+	BacketName           string `toml:"backet_name"`
+	AccessKeyID          string `toml:"access_key_ID"`
+	SecretAccessKey      string `toml:"secret_access_key"`
+}
+

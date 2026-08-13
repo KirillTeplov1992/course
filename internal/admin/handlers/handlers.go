@@ -30,12 +30,14 @@ var _ handlers.Handler = &handler{}
 type handler struct{
 	logger logging.Logger
 	repository store.Store
+	yandexClient yandex.S3Client
 }
 
 func NewHandler(repository store.Store, logger logging.Logger) handlers.Handler{
 	return &handler{
 		logger: logger,
 		repository: repository,
+		yandexClient: *yandex.NewS3Client(),
 	}
 }
 
@@ -172,7 +174,7 @@ func(h *handler) getTaskWithPicture(w http.ResponseWriter, r *http.Request){
 	
 	
 	// (Здесь ваша логика сохранения текстов в базу данных)
-	fmt.Printf("Глава: %s, Получена задача: %s, Ответ: %s, Тип: %s\n",chapterID, taskCode, answerCode, typeContent)
+	fmt.Printf("Глава: %d, Получена задача: %s, Ответ: %s, Тип: %s\n",chapterID, taskCode, answerCode, typeContent)
 
 	// 3. Обрабатываем загруженный файл картинки
 	file, header, err := r.FormFile("image")
@@ -182,7 +184,7 @@ func(h *handler) getTaskWithPicture(w http.ResponseWriter, r *http.Request){
 	}
 
 	uniqueFileName := fmt.Sprintf("%d-%s", time.Now().UnixNano(), header.Filename)
-	fileURL, err := yandex.DownLoadFile(uniqueFileName, file)
+	fileURL, err := h.yandexClient.DownLoadFile(uniqueFileName, file)
 	if err != nil{
 		h.logger.Printf("Ошибка загрузки в S3 %v", err)
 		http.Error(w, "Не удалось загрузить файл в облако", http.StatusInternalServerError)
@@ -198,10 +200,7 @@ func(h *handler) getTaskWithPicture(w http.ResponseWriter, r *http.Request){
 		TypeContent: typeContent,
 	}
 
-	h.repository.AdminRepository.AddTask(task)
-
-
-					
+	h.repository.AdminRepository.AddTask(task)					
 
 	// 4. Отправляем успешный ответ клиенту
 	w.Header().Set("Content-Type", "application/json")
