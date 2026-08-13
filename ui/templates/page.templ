@@ -28,9 +28,6 @@ templ TasksPage(tasks []*models.Task) {
             <h2>
             $${ t.Name }$$
             <img src={ templ.SafeURL(t.PictureURL) } alt="Чертеж" loading="lazy"/>
-            <p>{ templ.SafeURL(t.PictureURL) }</p>
-            <p>{ t.PictureURL }</p>
-            <p>{ templ.SafeURL(templ.URL(t.PictureURL)) }</p>
             <details>
                 <summary>Ответ:</summary>
             ${ t.Answer }$
